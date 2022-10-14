@@ -173,3 +173,6 @@ table {
   background-color: rgb(0, 0, 0, 0);
   border: none;
 }
+.active {
+  color: var(--pink);
+}

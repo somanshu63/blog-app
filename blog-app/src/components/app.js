@@ -1,19 +1,20 @@
 import React from "react";
-import { BrowserRouter, Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import "../styles/index.css";
 import Header from "./header";
 import Home from "./home";
 import Login from "./login";
 import Signup from "./signup";
 import Article from "./singleArticle";
+import NoMatch from "./noMatch";
 
 class App extends React.Component {
   render() {
     return (
-      <BrowserRouter>
-        <>
-          <div className="container font-sans">
-            <Header />
+      <>
+        <div className="container font-sans">
+          <Header />
+          <Switch>
             <Route path="/login">
               <Login />
             </Route>
@@ -24,9 +25,12 @@ class App extends React.Component {
               <Signup />
             </Route>
             <Route path="/:slug" component={Article}></Route>
-          </div>
-        </>
-      </BrowserRouter>
+            <Route path="*">
+              <NoMatch />
+            </Route>
+          </Switch>
+        </div>
+      </>
     );
   }
 }

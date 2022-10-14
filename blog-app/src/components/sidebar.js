@@ -6,26 +6,33 @@ class Sidebar extends React.Component {
     super(props);
     this.state = {
       tags: null,
+      error: null,
     };
   }
   componentDidMount() {
-    fetch("https://mighty-oasis-08080.herokuapp.com/api/articles")
-      .then((res) => res.json())
+    fetch("https://mighty-oasis-08080.herokuapp.com/api/tags")
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(res.statusText);
+        }
+        return res.json();
+      })
       .then((data) => {
-        let Tags = [];
-        const tags = data.articles.map((article) => article.tagList);
-        tags.reduce((cv, acc) => {
-          Tags.push(...cv);
-          return acc;
-        }, []);
-        Tags.sort((tag) => Math.random() - 0.5);
         this.setState({
-          tags: Tags,
+          tags: data.tags,
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        this.setState({
+          error: "not able to fetch tags",
+        });
+      });
   }
   render() {
+    const { error } = this.state;
+    if (error) {
+      return <p className="text-center p-4">{error}</p>;
+    }
     return (
       <div className="w-1/4 bg-pink h-full">
         <h2 className="text-center text-xl capitalize blue p-2">sidebar</h2>
