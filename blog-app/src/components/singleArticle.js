@@ -1,23 +1,38 @@
 import React from "react";
 import Hero from "./hero";
+import Loader from "./loader";
 
 class Article extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       article: null,
+      error: null,
     };
   }
   componentDidMount() {
+    this.fetchData();
+  }
+  fetchData = () => {
     const slug = this.props.match.params.slug;
     fetch(`https://mighty-oasis-08080.herokuapp.com/api/articles/${slug}`)
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(res.statusText);
+        }
+        return res.json();
+      })
       .then((article) => {
         this.setState({
           article: article,
         });
+      })
+      .catch((err) => {
+        this.setState({
+          error: "not able to fetch article",
+        });
       });
-  }
+  };
   render() {
     let article;
     if (this.state.article) {
@@ -54,8 +69,12 @@ class Article extends React.Component {
               </div>
             </div>
           </>
+        ) : this.state.error ? (
+          <p className="text-center mt-12 capitalize text-2xl text-red-700">
+            {this.state.error}
+          </p>
         ) : (
-          ""
+          <Loader />
         )}
       </div>
     );

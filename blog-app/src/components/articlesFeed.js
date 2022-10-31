@@ -37,7 +37,7 @@ function ArticleFeed(props) {
         <p className="text-l py-2">{article.description}</p>
         <NavLink
           className="lightBlue mt-4 inline-block border-2 border-solid rounded-lg py-1 px-2 border-blue-400"
-          to={`/${article.slug}`}
+          to={`/articles/${article.slug}`}
         >
           Read More
         </NavLink>

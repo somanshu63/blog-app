@@ -1,5 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import validate from "../utils/validate";
 
 class Login extends React.Component {
   constructor() {
@@ -21,19 +22,7 @@ class Login extends React.Component {
   handleInput = ({ target }) => {
     var { name, value } = target;
     let errors = this.state.errors;
-    switch (name) {
-      case "email":
-        errors.email = this.validateEmail(value) ? "" : "email not valid";
-        break;
-      case "password":
-        errors.password =
-          value.length < 6 || !/\d+/.test(value) || !/[a-zA-Z]/.test(value)
-            ? "password can't be less than 6 characters or must contain alphabet/number"
-            : "";
-        break;
-      default:
-        break;
-    }
+    validate(errors, name, value);
     this.setState({
       errors,
       [name]: value,
@@ -50,6 +39,7 @@ class Login extends React.Component {
   };
   render() {
     let { email, password } = this.state.errors;
+    let { Email, Password } = this.state;
     return (
       <div className="login flex-col p-12 flex justify-center items-center">
         <h2 className="text-2xl p-2 blue">Login</h2>
@@ -76,6 +66,7 @@ class Login extends React.Component {
             className="text-lg rounded-md w-70 py-1 px-4 my-2 border-2 border-solid border-blue-900 text-blue-900"
             type="text"
             name="email"
+            value={Email}
           ></input>
           <span className="text-lg text-red-600 py-1">{password}</span>
           <input
@@ -83,12 +74,14 @@ class Login extends React.Component {
             onChange={this.handleInput}
             type="password"
             name="password"
+            value={Password}
             className="text-lg rounded-md w-70 py-1 px-4 my-2 border-2 border-solid border-blue-900 text-blue-900"
           ></input>
           <input
-            className="text-lg cursor-pointer rounded-md w-70 py-1 px-4 my-2 border-2 border-solid border-blue-900 text-blue-900 bg-blue-100"
+            className="text-lg cursor-pointer rounded-md w-70 py-1 px-4 my-2 border-2 border-solid border-green-900 text-green-900 bg-green-100"
             type="submit"
             value="Login"
+            disabled={email || password}
           ></input>
         </form>
       </div>

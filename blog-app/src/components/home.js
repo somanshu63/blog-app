@@ -19,7 +19,6 @@ class Home extends React.Component {
   componentDidMount() {
     this.fetchData();
   }
-
   fetchData = () => {
     const tag = this.state.openTag ? `tag=${this.state.openTag}&` : "";
     fetch(
@@ -50,7 +49,11 @@ class Home extends React.Component {
       {
         [key]: value,
       },
-      key === "openTag" ? this.fetchData : ""
+      () => {
+        if (key === "openTag" || key === "activeIndex") {
+          this.fetchData();
+        }
+      }
     );
   };
   render() {

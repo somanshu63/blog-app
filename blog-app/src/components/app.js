@@ -24,7 +24,7 @@ class App extends React.Component {
             <Route path="/signup">
               <Signup />
             </Route>
-            <Route path="/:slug" component={Article}></Route>
+            <Route path="/articles/:slug" component={Article}></Route>
             <Route path="*">
               <NoMatch />
             </Route>

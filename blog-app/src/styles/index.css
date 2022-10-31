@@ -176,3 +176,8 @@ table {
 .active {
   color: var(--pink);
 }
+input:disabled {
+  background-color: lightgray;
+  border: gray;
+  color: gray;
+}

@@ -1,5 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import validate from "../utils/validate";
 
 class Signup extends React.Component {
   constructor() {
@@ -23,23 +24,7 @@ class Signup extends React.Component {
   handleInput = ({ target }) => {
     let { name, value } = target;
     let errors = this.state.errors;
-    switch (name) {
-      case "username":
-        errors.username =
-          value.length < 6 ? "length can't be less than 6 characters" : "";
-        break;
-      case "email":
-        errors.email = this.validateEmail(value) ? "" : "email not valid";
-        break;
-      case "password":
-        errors.password =
-          value.length < 6 || !/\d+/.test(value) || !/[a-zA-Z]/.test(value)
-            ? "password must contain letter/number & must be greater than 6"
-            : "";
-        break;
-      default:
-        break;
-    }
+    validate(errors, name, value);
     this.setState({
       errors,
       [name]: value,
@@ -56,6 +41,7 @@ class Signup extends React.Component {
   };
   render() {
     let { password, email, username } = this.state.errors;
+    let { Password, Email, Username } = this.state;
     return (
       <div className="login flex-col p-12 flex justify-center items-center">
         <h2 className="text-2xl p-2 blue">Sign up</h2>
@@ -82,6 +68,7 @@ class Signup extends React.Component {
             className="text-xl rounded-md w-70 py-1 px-4 my-2 border-2 border-solid border-blue-900 text-blue-900"
             type="text"
             name="email"
+            value={Email}
           ></input>
           <span className="text-lg text-red-500">{password}</span>
           <input
@@ -89,6 +76,7 @@ class Signup extends React.Component {
             onChange={this.handleInput}
             type="password"
             name="password"
+            value={Password}
             className="text-lg rounded-md w-70 py-1 px-4 my-2 border-2 border-solid border-blue-900 text-blue-900"
           ></input>
           <span className="text-lg text-red-500">{username}</span>
@@ -98,11 +86,13 @@ class Signup extends React.Component {
             className="text-lg rounded-md w-70 py-1 px-4 my-2 border-2 border-solid border-blue-900 text-blue-900"
             type="text"
             name="username"
+            value={Username}
           ></input>
           <input
             className="text-lg cursor-pointer rounded-md w-70 py-1 px-4 my-2 border-2 border-solid border-blue-900 text-blue-900 bg-blue-100"
             type="submit"
             value="Sign up"
+            disabled={email || password || username}
           ></input>
         </form>
       </div>

@@ -5,7 +5,11 @@ function Feed(props) {
         onClick={() => {
           props.handleState("openTag", "");
         }}
-        className="blue cursor-pointer ml-4 capitalize p-4 border-b-2 border-solid border-blue-900"
+        className={`${
+          props.openTag
+            ? "border-gray-500 text-gray-500"
+            : "border-blue-900 blue"
+        }  cursor-pointer ml-4 capitalize p-4 border-b-2 border-solid `}
       >
         global feed
       </span>
