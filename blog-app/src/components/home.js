@@ -13,18 +13,28 @@ class Home extends React.Component {
       articles: null,
       activeIndex: 0,
       articlesCount: 0,
+      myfeed: false,
+      author: null,
       error: "",
     };
   }
   componentDidMount() {
     this.fetchData();
+    this.setState({
+      author: this.props.author,
+    });
   }
   fetchData = () => {
     const tag = this.state.openTag ? `tag=${this.state.openTag}&` : "";
+    let authorFilter;
+    if (this.state.myfeed === true) {
+      authorFilter = `&author=${this.state.author}`;
+    }
+
     fetch(
       `https://mighty-oasis-08080.herokuapp.com/api/articles?${tag}limit=10&offset=${
         this.state.activeIndex * 10
-      }`
+      }${authorFilter ? authorFilter : ""}`
     )
       .then((res) => {
         if (!res.ok) {
@@ -47,10 +57,18 @@ class Home extends React.Component {
   handleState = (key, value) => {
     this.setState(
       {
+        openTag: "",
+        articles: null,
+        articlesCount: 0,
+        myfeed: false,
         [key]: value,
       },
       () => {
-        if (key === "openTag" || key === "activeIndex") {
+        if (
+          (key === "openTag" && value !== "") ||
+          key === "activeIndex" ||
+          key === "myfeed"
+        ) {
           this.fetchData();
         }
       }
@@ -62,12 +80,21 @@ class Home extends React.Component {
         <Hero />
         <div className="flex justify-end">
           <div className="home w-2/4">
-            <Feed handleState={this.handleState} openTag={this.state.openTag} />
+            <Feed
+              handleState={this.handleState}
+              openTag={this.state.openTag}
+              author={this.state.author}
+              myfeed={this.state.myfeed}
+            />
             <ArticlesFeed
               articles={this.state.articles}
               openTag={this.state.openTag}
             />
-            <Pagination handleState={this.handleState} state={this.state} />
+            <Pagination
+              handleState={this.handleState}
+              articlesCount={this.state.articlesCount}
+              activeIndex={this.state.activeIndex}
+            />
           </div>
           <Sidebar handleState={this.handleState} tags={this.state.tags} />
         </div>

@@ -1,5 +1,6 @@
 function Pagination(props) {
-  let { articlesCount, activeIndex } = props.state;
+  let articlesCount = props.articlesCount;
+  let activeIndex = props.activeIndex;
   let handleState = props.handleState;
   let num = [],
     count;
@@ -29,6 +30,7 @@ function Pagination(props) {
             {num.map((n, i) => {
               return (
                 <button
+                  key={i}
                   onClick={() => {
                     handleState("activeIndex", i);
                   }}
