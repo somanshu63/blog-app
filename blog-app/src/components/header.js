@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 
 class Header extends React.Component {
   render() {
-    const user = JSON.parse(localStorage.getItem("user"));
+    const user = this.props.user;
 
     return (
       <div className="py-2 px-4 flex justify-between items-center bg-blue">
@@ -19,11 +19,25 @@ class Header extends React.Component {
           </NavLink>
           {user ? (
             <>
+              <NavLink
+                activeClassName="active"
+                to="/new-post"
+                className="capitalize lightBlue text-base mx-4"
+              >
+                New Article
+              </NavLink>
+              <NavLink
+                activeClassName="active"
+                to="/settings"
+                className="capitalize lightBlue text-base mx-4"
+              >
+                Settings
+              </NavLink>
               <address className="capitalize creme">{user.username}</address>
               <a
                 href="/login"
                 onClick={() => {
-                  localStorage.removeItem("user");
+                  localStorage.removeItem("userToken");
                   this.props.handleLogIn(null);
                 }}
                 className="cursor-pointer capitalize lightBlue text-base mx-4"

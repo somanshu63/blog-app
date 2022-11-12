@@ -8,6 +8,9 @@ import Signup from "./signup";
 import Article from "./singleArticle";
 import NoMatch from "./noMatch";
 import Loader from "./loader";
+import Profile from "./profile";
+import Settings from "./settings";
+import NewPost from "./newPost";
 
 class App extends React.Component {
   state = {
@@ -16,13 +19,11 @@ class App extends React.Component {
     verified: false,
   };
   componentDidMount() {
-    const user = JSON.parse(localStorage.getItem("user"));
-    let token;
-    if (user) {
+    const token = JSON.parse(localStorage.getItem("userToken"));
+    if (token) {
       this.setState({
         verified: "verifying",
       });
-      token = user.token;
       fetch("https://mighty-oasis-08080.herokuapp.com/api/user", {
         method: "GET",
         headers: {
@@ -37,8 +38,6 @@ class App extends React.Component {
               verified: true,
               user: data.user,
             });
-          } else {
-            console.log(data.error);
           }
         });
     }
@@ -50,7 +49,7 @@ class App extends React.Component {
     });
   };
   render() {
-    const user = JSON.parse(localStorage.getItem("user"));
+    const user = this.state.user;
 
     return (
       <>
@@ -63,31 +62,71 @@ class App extends React.Component {
           </>
         ) : (
           <div className="container font-sans">
-            <Header handleLogIn={this.handleLogIn} />
-            <Switch>
-              <Route path="/login">
-                <Login handleLogIn={this.handleLogIn} />
-              </Route>
-              <Route exact path="/">
-                {user ? (
-                  <Home loggedIn={this.state.loggedIn} author={user.username} />
-                ) : (
-                  <Home />
-                )}
-              </Route>
-              <Route path="/signup">
-                <Signup handleLogIn={this.handleLogIn} />
-              </Route>
-              <Route path="/articles/:slug" component={Article}></Route>
-              <Route path="*">
-                <NoMatch />
-              </Route>
-            </Switch>
+            <Header handleLogIn={this.handleLogIn} user={this.state.user} />
+            {this.state.loggedIn ? (
+              <Authenticated user={user} loggedIn={this.state.loggedIn} />
+            ) : (
+              <Unauthenticated
+                user={user}
+                loggedIn={this.state.loggedIn}
+                handleLogIn={this.handleLogIn}
+              />
+            )}
           </div>
         )}
       </>
     );
   }
+}
+
+function Authenticated(props) {
+  return (
+    <Switch>
+      <Route exact path="/">
+        {props.user ? (
+          <Home loggedIn={props.loggedIn} author={props.user.username} />
+        ) : (
+          <Home />
+        )}
+      </Route>
+      <Route path="/new-post">
+        <NewPost />
+      </Route>
+      <Route path="/settings">
+        <Settings />
+      </Route>
+      <Route path="/profile">
+        <Profile />
+      </Route>
+      <Route path="/articles/:slug" component={Article}></Route>
+      <Route path="*">
+        <NoMatch />
+      </Route>
+    </Switch>
+  );
+}
+function Unauthenticated(props) {
+  return (
+    <Switch>
+      <Route exact path="/">
+        {props.user ? (
+          <Home loggedIn={props.loggedIn} author={props.user.username} />
+        ) : (
+          <Home />
+        )}
+      </Route>
+      <Route path="/signup">
+        <Signup handleLogIn={props.handleLogIn} />
+      </Route>
+      <Route path="/login">
+        <Login handleLogIn={props.handleLogIn} />
+      </Route>
+      <Route path="/articles/:slug" component={Article}></Route>
+      <Route path="*">
+        <NoMatch />
+      </Route>
+    </Switch>
+  );
 }
 
 export default App;

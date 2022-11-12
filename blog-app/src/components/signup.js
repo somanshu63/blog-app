@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, Redirect } from "react-router-dom";
+import { NavLink, withRouter } from "react-router-dom";
 import validate from "../utils/validate";
 
 class Signup extends React.Component {
@@ -9,7 +9,6 @@ class Signup extends React.Component {
       username: null,
       email: null,
       password: null,
-      loggedIn: false,
       errors: {
         username: null,
         email: null,
@@ -45,40 +44,25 @@ class Signup extends React.Component {
         user: {
           username: `${this.state.username}`,
           email: `${this.state.email}`,
-
           password: `${this.state.password}`,
         },
       }),
     })
       .then((res) => {
         if (!res.ok) {
-          throw new Error(res.statusText);
+          return res.json().then(({ errors }) => {
+            return Promise.reject(errors);
+          });
         }
         return res.json();
       })
       .then((user) => {
-        console.log(user);
-        if (user && user.errors) {
-          this.setState({
-            errors: {
-              email: `${user.errors["email or password"]}`,
-            },
-          });
-        } else if (user && user.user) {
-          this.setState({
-            loggedIn: true,
-          });
-          localStorage.setItem("user", JSON.stringify(user.user));
-
-          this.props.handleLogIn(user.user);
-        }
+        localStorage.setItem("userToken", JSON.stringify(user.user.token));
+        this.props.handleLogIn(user.user);
+        this.props.history.push("/");
       })
-      .catch((err) => {
-        this.setState({
-          errors: {
-            email: "not able to sign up",
-          },
-        });
+      .catch((errors) => {
+        this.setState({ errors });
       });
   };
   render() {
@@ -86,7 +70,6 @@ class Signup extends React.Component {
     let { Password, Email, Username } = this.state;
     return (
       <>
-        {this.state.loggedIn ? <Redirect to="/" /> : ""}
         <div className="login flex-col p-12 flex justify-center items-center">
           <h2 className="text-2xl p-2 blue">Sign up</h2>
           <div className="flex flex-row">
@@ -145,4 +128,4 @@ class Signup extends React.Component {
     );
   }
 }
-export default Signup;
+export default withRouter(Signup);

@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, Redirect } from "react-router-dom";
+import { NavLink, withRouter } from "react-router-dom";
 import validate from "../utils/validate";
 
 class Login extends React.Component {
@@ -8,7 +8,6 @@ class Login extends React.Component {
     this.state = {
       email: null,
       password: null,
-      loggedIn: false,
       loading: false,
       errors: {
         password: "",
@@ -50,29 +49,25 @@ class Login extends React.Component {
     })
       .then((res) => {
         if (!res.ok) {
-          throw new Error(res.statusText);
+          this.setState({
+            loading: false,
+          });
+          return res.json().then(({ errors }) => {
+            return Promise.reject(errors);
+          });
         }
         return res.json();
       })
       .then((user) => {
-        if (user && user.errors) {
-          this.setState({
-            errors: {
-              email: `${user.errors["email or password"]}`,
-            },
-          });
-        } else if (user && user.user) {
-          this.setState({
-            loggedIn: true,
-          });
-          localStorage.setItem("user", JSON.stringify(user.user));
-          this.props.handleLogIn(user.user);
-        }
+        localStorage.setItem("userToken", JSON.stringify(user.user.token));
+        this.props.handleLogIn(user.user);
+        this.props.history.push("/");
       })
-      .catch((err) => {
+      .catch((errors) => {
+        console.log(errors);
         this.setState({
           errors: {
-            email: "not able to login",
+            email: "invalid",
           },
         });
       });
@@ -82,7 +77,6 @@ class Login extends React.Component {
     let { Email, Password } = this.state;
     return (
       <>
-        {this.state.loggedIn ? <Redirect to="/" /> : ""}
         {this.state.loading ? (
           <div className="flex justify-center">
             <div className=" loader m-12"></div>
@@ -141,4 +135,4 @@ class Login extends React.Component {
     );
   }
 }
-export default Login;
+export default withRouter(Login);
