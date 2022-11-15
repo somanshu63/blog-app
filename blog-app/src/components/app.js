@@ -11,6 +11,7 @@ import Loader from "./loader";
 import Profile from "./profile";
 import Settings from "./settings";
 import NewPost from "./newPost";
+import UserProfile from "./userProfile";
 
 class App extends React.Component {
   state = {
@@ -48,6 +49,11 @@ class App extends React.Component {
       user: user,
     });
   };
+  updateUser = (user) => {
+    this.setState({
+      user: user,
+    });
+  };
   render() {
     const user = this.state.user;
 
@@ -64,7 +70,11 @@ class App extends React.Component {
           <div className="container font-sans">
             <Header handleLogIn={this.handleLogIn} user={this.state.user} />
             {this.state.loggedIn ? (
-              <Authenticated user={user} loggedIn={this.state.loggedIn} />
+              <Authenticated
+                user={user}
+                loggedIn={this.state.loggedIn}
+                updateUser={this.updateUser}
+              />
             ) : (
               <Unauthenticated
                 user={user}
@@ -90,15 +100,22 @@ function Authenticated(props) {
         )}
       </Route>
       <Route path="/new-post">
-        <NewPost />
+        <NewPost token={props.user.token} />
       </Route>
       <Route path="/settings">
-        <Settings />
+        <Settings
+          user={props.user}
+          token={props.user.token}
+          updateUser={props.updateUser}
+        />
       </Route>
+
       <Route path="/profile">
-        <Profile />
+        <Profile user={props.user} />
       </Route>
       <Route path="/articles/:slug" component={Article}></Route>
+      <Route path="/profiles/:username" component={UserProfile}></Route>
+
       <Route path="*">
         <NoMatch />
       </Route>
@@ -122,6 +139,7 @@ function Unauthenticated(props) {
         <Login handleLogIn={props.handleLogIn} />
       </Route>
       <Route path="/articles/:slug" component={Article}></Route>
+      <Route path="/profiles/:username" component={UserProfile}></Route>
       <Route path="*">
         <NoMatch />
       </Route>

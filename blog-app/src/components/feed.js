@@ -1,6 +1,6 @@
 function Feed(props) {
   return (
-    <div className="flex justify-start">
+    <div className="flex justify-start ml-4 outline-active">
       {props.author ? (
         <span
           onClick={() => {
@@ -10,9 +10,9 @@ function Feed(props) {
             !props.myfeed || props.openTag
               ? "border-gray-500 text-gray-500"
               : "border-blue-900 blue"
-          }  cursor-pointer ml-4 capitalize p-4 border-b-2 border-solid `}
+          }  cursor-pointer capitalize p-4 border-b-2 border-solid `}
         >
-          Your Feed
+          {props.myArticles ? "Your Articles" : "Your Feed"}
         </span>
       ) : (
         ""
@@ -25,12 +25,12 @@ function Feed(props) {
           props.openTag || props.myfeed
             ? "border-gray-500 text-gray-500"
             : "border-blue-900 blue"
-        }  cursor-pointer ml-4 capitalize p-4 border-b-2 border-solid `}
+        }  cursor-pointer capitalize p-4 border-b-2 border-solid `}
       >
-        Global Feed
+        {props.favouritedFeed ? "Favourited Articles" : "Global Feed"}
       </span>
       {props.openTag ? (
-        <span className="blue cursor-pointer ml-4 capitalize p-4 border-b-2 border-solid border-blue-900">
+        <span className="blue cursor-pointer capitalize p-4 border-b-2 border-solid border-blue-900">
           #{props.openTag}
         </span>
       ) : (
