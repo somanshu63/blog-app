@@ -11,7 +11,6 @@ import Loader from "./loader";
 import Profile from "./profile";
 import Settings from "./settings";
 import NewPost from "./newPost";
-import UserProfile from "./userProfile";
 
 class App extends React.Component {
   state = {
@@ -110,11 +109,10 @@ function Authenticated(props) {
         />
       </Route>
 
-      <Route path="/profile">
+      <Route path="/profiles/:username">
         <Profile user={props.user} />
       </Route>
       <Route path="/articles/:slug" component={Article}></Route>
-      <Route path="/profiles/:username" component={UserProfile}></Route>
 
       <Route path="*">
         <NoMatch />
@@ -139,7 +137,9 @@ function Unauthenticated(props) {
         <Login handleLogIn={props.handleLogIn} />
       </Route>
       <Route path="/articles/:slug" component={Article}></Route>
-      <Route path="/profiles/:username" component={UserProfile}></Route>
+      <Route path="/profiles/:username">
+        <Profile user={props.user} />
+      </Route>
       <Route path="*">
         <NoMatch />
       </Route>

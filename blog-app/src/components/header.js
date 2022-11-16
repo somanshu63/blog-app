@@ -35,7 +35,7 @@ class Header extends React.Component {
               </NavLink>
               <NavLink
                 activeClassName="active"
-                to={`/profile`}
+                to={`/profiles/${user.username}`}
                 className="capitalize creme  text-base mx-4"
               >
                 {user.username}

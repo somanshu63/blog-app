@@ -39,15 +39,13 @@ class NewPost extends React.Component {
           title: title,
           description: description,
           body: body,
-          tagList: [tags],
+          tagList: tags.split(",").map((tag) => tag.trim()),
         },
       }),
     })
       .then((res) => {
         if (!res.ok) {
-          return res.json().then(({ errors }) => {
-            return Promise.reject(errors);
-          });
+          throw new Error("cant create new article");
         }
         return res.json();
       })
