@@ -198,3 +198,8 @@ input:disabled {
     transform: rotate(360deg);
   }
 }
+.comment {
+  padding: 4px;
+  border: 1px solid var(--blue);
+  border-radius: 4px;
+}

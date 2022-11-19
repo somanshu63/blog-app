@@ -79,6 +79,7 @@ class Profile extends React.Component {
           <div>
             <HeroProfile
               user={this.state.user}
+              currentUser={this.state.currentUser}
               follow={
                 this.state.user.username !== this.state.currentUser.username
               }

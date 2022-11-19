@@ -75,6 +75,8 @@ class Home extends React.Component {
             <ArticlesFeed
               articles={this.state.articles}
               openTag={this.state.openTag}
+              user={this.props.user}
+              handleState={this.handleState}
             />
             <Pagination
               handleState={this.handleState}

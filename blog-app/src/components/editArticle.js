@@ -1,7 +1,7 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 
-class NewPost extends React.Component {
+class EditArticle extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -26,26 +26,29 @@ class NewPost extends React.Component {
       });
     }
   };
-  addArticle = () => {
+  editArticle = () => {
     let { title, description, tags, body } = this.state;
-    fetch(`https://mighty-oasis-08080.herokuapp.com/api/articles`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Token ${this.props.token}`,
-      },
-      body: JSON.stringify({
-        article: {
-          title: title,
-          description: description,
-          body: body,
-          tagList: tags.split(",").map((tag) => tag.trim()),
+    fetch(
+      `https://mighty-oasis-08080.herokuapp.com/api/articles/${this.props.location.state.article.slug}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Token ${this.props.user.token}`,
         },
-      }),
-    })
+        body: JSON.stringify({
+          article: {
+            title: title,
+            description: description,
+            body: body,
+            tagList: tags,
+          },
+        }),
+      }
+    )
       .then((res) => {
         if (!res.ok) {
-          throw new Error("cant create new article");
+          throw new Error("can't edit article");
         }
         return res.json();
       })
@@ -58,6 +61,16 @@ class NewPost extends React.Component {
         });
       });
   };
+  componentDidMount() {
+    let { title, description, body, tagList } =
+      this.props.location.state.article;
+    this.setState({
+      title: title,
+      description: description,
+      tags: tagList.toString(),
+      body: body,
+    });
+  }
   render() {
     let { title, description, tags, body } = this.state;
     let formControlClass =
@@ -65,14 +78,14 @@ class NewPost extends React.Component {
     return (
       <div className="bg-creme pb-28">
         <h2 className="capitalize text-2xl text-center p-4 blue ">
-          add article
+          edit article
         </h2>
         <div className="text-center mx-auto w-3/5">
           <form
             onSubmit={(event) => {
               event.preventDefault();
               this.checkInput();
-              this.addArticle();
+              this.editArticle();
             }}
           >
             <span className="text-red-600">
@@ -112,8 +125,8 @@ class NewPost extends React.Component {
             ></input>
             <input
               type="submit"
-              value="Add Article"
-              className={`bg-blue-300 blue ${formControlClass}`}
+              value="Edit Article"
+              className={`bg-blue-300 blue ${formControlClass} cursor-pointer`}
             ></input>
           </form>
         </div>
@@ -122,4 +135,4 @@ class NewPost extends React.Component {
   }
 }
 
-export default withRouter(NewPost);
+export default withRouter(EditArticle);

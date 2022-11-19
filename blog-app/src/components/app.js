@@ -11,6 +11,7 @@ import Loader from "./loader";
 import Profile from "./profile";
 import Settings from "./settings";
 import NewPost from "./newPost";
+import EditArticle from "./editArticle";
 
 class App extends React.Component {
   state = {
@@ -92,11 +93,11 @@ function Authenticated(props) {
   return (
     <Switch>
       <Route exact path="/">
-        {props.user ? (
-          <Home loggedIn={props.loggedIn} author={props.user.username} />
-        ) : (
-          <Home />
-        )}
+        <Home
+          loggedIn={props.loggedIn}
+          author={props.user.username}
+          user={props.user}
+        />
       </Route>
       <Route path="/new-post">
         <NewPost token={props.user.token} />
@@ -112,8 +113,12 @@ function Authenticated(props) {
       <Route path="/profiles/:username">
         <Profile user={props.user} />
       </Route>
-      <Route path="/articles/:slug" component={Article}></Route>
-
+      <Route path="/articles/:slug">
+        <Article user={props.user} />
+      </Route>
+      <Route path="/edit-article">
+        <EditArticle user={props.user} />
+      </Route>
       <Route path="*">
         <NoMatch />
       </Route>
@@ -124,11 +129,7 @@ function Unauthenticated(props) {
   return (
     <Switch>
       <Route exact path="/">
-        {props.user ? (
-          <Home loggedIn={props.loggedIn} author={props.user.username} />
-        ) : (
-          <Home />
-        )}
+        <Home />
       </Route>
       <Route path="/signup">
         <Signup handleLogIn={props.handleLogIn} />
