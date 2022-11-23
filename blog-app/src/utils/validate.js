@@ -1,3 +1,8 @@
+function validateEmail(email) {
+  const re =
+    /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+  return re.test(email);
+}
 export default function validate(errors, name, value) {
   switch (name) {
     case "username":
@@ -5,7 +10,7 @@ export default function validate(errors, name, value) {
         value.length < 6 ? "length can't be less than 6 characters" : "";
       break;
     case "email":
-      errors.email = this.validateEmail(value) ? "" : "email not valid";
+      errors.email = validateEmail(value) ? "" : "email not valid";
       break;
     case "password":
       errors.password =

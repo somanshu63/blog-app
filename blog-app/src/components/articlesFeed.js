@@ -8,6 +8,13 @@ class ArticlesFeed extends React.Component {
 
     return (
       <section className="articles">
+        {articles && articles.length < 1 ? (
+          <p className="text-center my-4 text-xl capitalize">
+            no articles to show
+          </p>
+        ) : (
+          ""
+        )}
         {articles ? (
           articles.map((article, i) => {
             return <ArticleFeed article={article} key={i} />;

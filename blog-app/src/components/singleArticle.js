@@ -34,21 +34,27 @@ class Article extends React.Component {
       });
   };
   render() {
-    let article;
+    let article, author;
     if (this.state.article) {
       article = this.state.article.article;
+      author = (
+        <div className="flex items-center">
+          <img
+            className="h-12 w-12 mx-4 inline-block rounded-full"
+            src={article.author.image}
+            alt={article.author.username}
+          ></img>
+          <p>{article.author.username}</p>
+        </div>
+      );
     }
+
     return (
       <div>
         {this.state.article ? (
           <>
-            <Hero title={article.title} description={article.author.username} />
+            <Hero title={article.title} description={author} />
             <div className="mx-8 my-4">
-              <img
-                className="h-20 w-20 my-4 inline-block rounded-full"
-                src={article.author.image}
-                alt={article.author.username}
-              ></img>
               <p className="text-lg py-4">{article.description}</p>
               <p className="text-lg py-4">{article.body}</p>
               <p className="text-lg py-4">{article.slug}</p>
