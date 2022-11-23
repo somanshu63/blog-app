@@ -33,24 +33,26 @@ class Settings extends React.Component {
     });
   };
   updateDetails = () => {
-    let { imageURL, username, bio, password, email } = this.state;
-    fetch(`https://mighty-oasis-08080.herokuapp.com/api/user`, {
+    let Password = this.state.password ? `password: this.state.password` : "";
+    let { imageURL, username, bio, email } = this.state;
+    fetch(`/api/user`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Token ${this.props.token}`,
+        authorization: `${this.props.token}`,
       },
       body: JSON.stringify({
         user: {
           image: imageURL,
           username: username,
           bio: bio,
-          password: password,
           email: email,
+          Password,
         },
       }),
     })
       .then((res) => {
+        console.log(res);
         if (!res.ok) {
           return res.json().then(({ errors }) => {
             return Promise.reject(errors);
@@ -59,7 +61,6 @@ class Settings extends React.Component {
         return res.json();
       })
       .then((user) => {
-        console.log(user);
         this.props.updateUser(user.user);
       })
       .catch((errors) => {

@@ -13,7 +13,7 @@ class Header extends React.Component {
             activeClassName="active"
             to={"/"}
             exact
-            className="capitalize lightBlue text-base mx-4"
+            className="capitalize hover:scale-125 text-white text-base mx-4"
           >
             Home
           </NavLink>
@@ -22,21 +22,21 @@ class Header extends React.Component {
               <NavLink
                 activeClassName="active"
                 to="/new-post"
-                className="capitalize lightBlue text-base mx-4"
+                className="capitalize hover:scale-125 text-white text-base mx-4"
               >
                 New Article
               </NavLink>
               <NavLink
                 activeClassName="active"
                 to="/settings"
-                className="capitalize lightBlue text-base mx-4"
+                className="capitalize hover:scale-125 text-white text-base mx-4"
               >
                 Settings
               </NavLink>
               <NavLink
                 activeClassName="active"
                 to={`/profiles/${user.username}`}
-                className="capitalize creme  text-base mx-4"
+                className="capitalize hover:scale-125 creme  text-base mx-4"
               >
                 {user.username}
               </NavLink>
@@ -46,7 +46,7 @@ class Header extends React.Component {
                   localStorage.removeItem("userToken");
                   this.props.handleLogIn(null);
                 }}
-                className="cursor-pointer capitalize lightBlue text-base mx-4"
+                className="cursor-pointer capitalize hover:scale-125 text-white text-base mx-4"
               >
                 logout
               </a>
@@ -57,14 +57,14 @@ class Header extends React.Component {
               <NavLink
                 activeClassName="active"
                 to="/login"
-                className="capitalize lightBlue text-base mx-4"
+                className="capitalize hover:scale-125 text-white text-base mx-4"
               >
                 login
               </NavLink>
               <NavLink
                 activeClassName="active"
                 to={"/signup"}
-                className="capitalize lightBlue text-base mx-4"
+                className="capitalize hover:scale-125 text-white text-base mx-4"
               >
                 signup
               </NavLink>

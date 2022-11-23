@@ -16,16 +16,17 @@ class Profile extends React.Component {
       currentUser: "",
       myfeed: true,
       user: "",
+      error: null,
       currentUsername: "",
     };
   }
   componentDidMount() {
-    url = `https://mighty-oasis-08080.herokuapp.com/api/profiles/${this.props.match.params.username}`;
+    url = `/api/profiles/${this.props.match.params.username}`;
     this.fetch(url);
   }
   componentDidUpdate() {
     if (this.props.match.params.username !== this.state.currentUsername) {
-      url = `https://mighty-oasis-08080.herokuapp.com/api/profiles/${this.props.match.params.username}`;
+      url = `/api/profiles/${this.props.match.params.username}`;
       this.fetch(url);
     }
   }
@@ -45,7 +46,8 @@ class Profile extends React.Component {
                 ? `&author=${this.state.user.username}`
                 : `&favorited=${this.state.user.username}`,
               0,
-              this.handleState
+              this.handleState,
+              this.props.user.token
             );
           }
         );
@@ -64,7 +66,8 @@ class Profile extends React.Component {
               ? `&author=${this.state.user.username}`
               : `&favorited=${this.state.user.username}`,
             0,
-            this.handleState
+            this.handleState,
+            this.props.user.token
           );
         }
       }
@@ -79,8 +82,11 @@ class Profile extends React.Component {
           <div>
             <HeroProfile
               user={this.state.user}
+              currentUser={this.state.currentUser}
               follow={
-                this.state.user.username !== this.state.currentUser.username
+                this.state.currentUser
+                  ? this.state.user.username !== this.state.currentUser.username
+                  : ""
               }
             />
             <div className="w-3/5 mx-auto">
@@ -92,6 +98,10 @@ class Profile extends React.Component {
                 handleState={this.handleState}
               />
               <ArticlesFeed
+                handleState={this.handleState}
+                myfeed={this.state.myfeed}
+                user={this.props.user}
+                error={this.state.error}
                 articles={this.state.articles}
                 openTag={this.state.openTag}
               />

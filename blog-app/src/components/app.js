@@ -11,6 +11,7 @@ import Loader from "./loader";
 import Profile from "./profile";
 import Settings from "./settings";
 import NewPost from "./newPost";
+import EditArticle from "./editArticle";
 
 class App extends React.Component {
   state = {
@@ -24,15 +25,17 @@ class App extends React.Component {
       this.setState({
         verified: "verifying",
       });
-      fetch("https://mighty-oasis-08080.herokuapp.com/api/user", {
+      fetch("/api/user", {
         method: "GET",
         headers: {
-          authorization: `Token ${token}`,
+          authorization: `${token}`,
         },
       })
-        .then((data) => data.json())
         .then((data) => {
-          if (data.user) {
+          return data.json();
+        })
+        .then((data) => {
+          if (data && data.user) {
             this.setState({
               loggedIn: true,
               verified: true,
@@ -92,11 +95,11 @@ function Authenticated(props) {
   return (
     <Switch>
       <Route exact path="/">
-        {props.user ? (
-          <Home loggedIn={props.loggedIn} author={props.user.username} />
-        ) : (
-          <Home />
-        )}
+        <Home
+          loggedIn={props.loggedIn}
+          author={props.user.username}
+          user={props.user}
+        />
       </Route>
       <Route path="/new-post">
         <NewPost token={props.user.token} />
@@ -108,12 +111,15 @@ function Authenticated(props) {
           updateUser={props.updateUser}
         />
       </Route>
-
       <Route path="/profiles/:username">
         <Profile user={props.user} />
       </Route>
-      <Route path="/articles/:slug" component={Article}></Route>
-
+      <Route path="/articles/:slug">
+        <Article user={props.user} />
+      </Route>
+      <Route path="/edit-article">
+        <EditArticle user={props.user} />
+      </Route>
       <Route path="*">
         <NoMatch />
       </Route>
@@ -124,11 +130,7 @@ function Unauthenticated(props) {
   return (
     <Switch>
       <Route exact path="/">
-        {props.user ? (
-          <Home loggedIn={props.loggedIn} author={props.user.username} />
-        ) : (
-          <Home />
-        )}
+        <Home />
       </Route>
       <Route path="/signup">
         <Signup handleLogIn={props.handleLogIn} />

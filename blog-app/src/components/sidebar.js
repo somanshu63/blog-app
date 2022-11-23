@@ -10,7 +10,7 @@ class Sidebar extends React.Component {
     };
   }
   componentDidMount() {
-    fetch("https://mighty-oasis-08080.herokuapp.com/api/tags")
+    fetch(`/api/tags`)
       .then((res) => {
         if (!res.ok) {
           throw new Error(res.statusText);
@@ -59,7 +59,7 @@ function Tag(props) {
         event.preventDefault();
         props.handleState("openTag", props.tag);
       }}
-      className="text-xs py-1 px-2 m-1 border-solid border rounded-md border-blue-900 blue capitalize"
+      className="text-xs tag  py-1 px-2 m-1 border-solid border rounded-md border-blue-900 blue capitalize"
       href="/"
     >
       {props.tag}

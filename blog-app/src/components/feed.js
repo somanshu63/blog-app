@@ -8,7 +8,7 @@ function Feed(props) {
           }}
           className={`${
             !props.myfeed || props.openTag
-              ? "border-gray-500 text-gray-500"
+              ? "border-gray-400 text-gray-400"
               : "border-blue-900 blue"
           }  cursor-pointer capitalize p-4 border-b-2 border-solid `}
         >
@@ -23,7 +23,7 @@ function Feed(props) {
         }}
         className={`${
           props.openTag || props.myfeed
-            ? "border-gray-500 text-gray-500"
+            ? "border-gray-400 text-gray-400"
             : "border-blue-900 blue"
         }  cursor-pointer capitalize p-4 border-b-2 border-solid `}
       >
