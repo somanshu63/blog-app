@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-export default class HeroProfile extends React.Component {
+class HeroProfile extends React.Component {
   state = {
     user: "",
     currentUser: null,
@@ -13,16 +13,13 @@ export default class HeroProfile extends React.Component {
     });
   }
   followAuthor = () => {
-    fetch(
-      `https://mighty-oasis-08080.herokuapp.com/api/profiles/${this.state.user.username}/follow`,
-      {
-        method: this.state.user.following ? "DELETE" : "POST",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Token ${this.state.currentUser.token}`,
-        },
-      }
-    )
+    fetch(`/api/profiles/${this.state.user.username}/follow`, {
+      method: this.state.user.following ? "DELETE" : "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `${this.state.currentUser.token}`,
+      },
+    })
       .then((res) => {
         if (!res.ok) {
           throw new Error("can't follow author");
@@ -48,11 +45,11 @@ export default class HeroProfile extends React.Component {
           <div className="flex items-center flex-col justify-evenly ">
             <div className="flex items-center">
               <img
-                className="w-16  rounded-2xl h-16"
+                className="w-16 rounded-3xl h-16"
                 src={image}
                 alt={username}
               ></img>
-              <h1 className="medBlue text-3xl capitalize p-3">{username}</h1>
+              <h1 className="blue text-3xl capitalize p-3">{username}</h1>
             </div>
             <a
               className="  text-xl p-3"
@@ -85,3 +82,5 @@ export default class HeroProfile extends React.Component {
     );
   }
 }
+
+export default HeroProfile;

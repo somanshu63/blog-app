@@ -24,22 +24,24 @@ class NewPost extends React.Component {
       this.setState({
         error: "all fields are required*",
       });
+    } else {
+      this.addArticle();
     }
   };
   addArticle = () => {
     let { title, description, tags, body } = this.state;
-    fetch(`https://mighty-oasis-08080.herokuapp.com/api/articles`, {
+    fetch(`/api/articles`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Token ${this.props.token}`,
+        authorization: `${this.props.token}`,
       },
       body: JSON.stringify({
         article: {
           title: title,
           description: description,
           body: body,
-          tagList: tags.split(",").map((tag) => tag.trim()),
+          taglist: tags.split(",").map((tag) => tag.trim()),
         },
       }),
     })
@@ -50,7 +52,7 @@ class NewPost extends React.Component {
         return res.json();
       })
       .then((article) => {
-        this.props.history.push(`/articles/${article.article.slug}`);
+        this.props.history.push(`/articles/${article.article.article.slug}`);
       })
       .catch((errors) => {
         this.setState({
@@ -72,7 +74,6 @@ class NewPost extends React.Component {
             onSubmit={(event) => {
               event.preventDefault();
               this.checkInput();
-              this.addArticle();
             }}
           >
             <span className="text-red-600">
@@ -113,7 +114,11 @@ class NewPost extends React.Component {
             <input
               type="submit"
               value="Add Article"
-              className={`bg-blue-300 blue ${formControlClass}`}
+              className={`${formControlClass}${
+                !title || !description || !tags || !body
+                  ? ` text-red-700 border-red-700 bg-red-300`
+                  : ` text-green-700 border-green-700 bg-green-300`
+              }`}
             ></input>
           </form>
         </div>

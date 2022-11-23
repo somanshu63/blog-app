@@ -26,7 +26,7 @@ export default class Comment extends React.Component {
     }
   };
   componentDidMount() {
-    commentUrl = `https://mighty-oasis-08080.herokuapp.com/api/articles/${this.props.slug}/comments`;
+    commentUrl = `/api/articles/${this.props.slug}/comments`;
     this.fetchComments();
   }
   addComment = () => {
@@ -35,7 +35,7 @@ export default class Comment extends React.Component {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Token ${this.props.user.token}`,
+        authorization: `${this.props.user.token}`,
       },
       body: JSON.stringify({
         comment: {
@@ -89,14 +89,24 @@ export default class Comment extends React.Component {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Token ${this.props.user.token}`,
+        authorization: `${this.props.user.token}`,
       },
     })
       .then((res) => {
         if (!res.ok) {
-          throw new Error("cant delete comment");
+          throw new Error("can't delete comment");
         }
-        this.fetchComments();
+        return res.json();
+      })
+      .then((data) => {
+        this.setState(
+          {
+            comments: [],
+          },
+          () => {
+            this.fetchComments();
+          }
+        );
       })
       .catch((errors) => {
         this.setState({
@@ -134,7 +144,7 @@ export default class Comment extends React.Component {
               <input
                 type="submit"
                 value="Add Comment"
-                className={`bg-blue-300 blue ${formControlClass}`}
+                className={`bg-blue-300 hover:scale-110 blue ${formControlClass}`}
               ></input>
             </form>
           </>
@@ -181,7 +191,7 @@ function SingleComment(props) {
           onClick={() => {
             props.deleteComment(props.comment.id);
           }}
-          className="text-red-500 text-xs"
+          className="text-red-500 text-xs hover:scale-125"
         >
           <i className="fa-solid fa-trash"></i>
         </button>

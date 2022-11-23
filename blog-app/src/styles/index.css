@@ -131,13 +131,17 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
-
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
 :root {
-  --blue: rgb(36, 49, 94);
-  --pink: rgb(244, 109, 109);
-  --creme: rgb(247, 233, 160);
-  --lightBlue: rgb(168, 209, 231);
-  --medBlue: rgb(55, 71, 134);
+  --blue: #685369;
+  --pink: #efa48b;
+  --creme: #c6d8af;
+  --lightBlue: #dbd8b3;
+  --medBlue: #fcc8b2;
 }
 .pink {
   color: var(--pink);
@@ -202,4 +206,39 @@ input:disabled {
   padding: 4px;
   border: 1px solid var(--blue);
   border-radius: 4px;
+}
+button,
+input[type="submit"] {
+  cursor: pointer;
+}
+input[type="submit"]:disabled {
+  border-color: red;
+  border: 2px solid red;
+  color: red;
+  background-color: rgb(247, 176, 176);
+}
+.article:hover {
+  border-color: var(--creme);
+  transform: scale(1.025);
+  box-shadow: 0px 4px 5px 2px var(--creme);
+}
+.article:hover ~ h3 {
+  text-decoration: underline;
+}
+.read-more:hover {
+  box-shadow: 0px 4px 5px 2px rgb(78, 173, 250);
+}
+.favorite:hover {
+  transform: scale(1.2);
+}
+.tag:hover {
+  background-color: #685369;
+  color: white;
+  transform: scale(1.2);
+  border-color: #685369;
+  font-size: small;
+}
+.comment:hover {
+  border-color: #3498db;
+  transform: scale(1.1);
 }

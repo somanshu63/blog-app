@@ -25,15 +25,17 @@ class App extends React.Component {
       this.setState({
         verified: "verifying",
       });
-      fetch("https://mighty-oasis-08080.herokuapp.com/api/user", {
+      fetch("/api/user", {
         method: "GET",
         headers: {
-          authorization: `Token ${token}`,
+          authorization: `${token}`,
         },
       })
-        .then((data) => data.json())
         .then((data) => {
-          if (data.user) {
+          return data.json();
+        })
+        .then((data) => {
+          if (data && data.user) {
             this.setState({
               loggedIn: true,
               verified: true,
@@ -109,7 +111,6 @@ function Authenticated(props) {
           updateUser={props.updateUser}
         />
       </Route>
-
       <Route path="/profiles/:username">
         <Profile user={props.user} />
       </Route>

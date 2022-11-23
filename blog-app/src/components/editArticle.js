@@ -28,24 +28,21 @@ class EditArticle extends React.Component {
   };
   editArticle = () => {
     let { title, description, tags, body } = this.state;
-    fetch(
-      `https://mighty-oasis-08080.herokuapp.com/api/articles/${this.props.location.state.article.slug}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Token ${this.props.user.token}`,
+    fetch(`/api/articles/${this.props.location.state.article.slug}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `${this.props.user.token}`,
+      },
+      body: JSON.stringify({
+        article: {
+          title: title,
+          description: description,
+          body: body,
+          taglist: tags,
         },
-        body: JSON.stringify({
-          article: {
-            title: title,
-            description: description,
-            body: body,
-            tagList: tags,
-          },
-        }),
-      }
-    )
+      }),
+    })
       .then((res) => {
         if (!res.ok) {
           throw new Error("can't edit article");
@@ -53,7 +50,7 @@ class EditArticle extends React.Component {
         return res.json();
       })
       .then((article) => {
-        this.props.history.push(`/articles/${article.article.slug}`);
+        this.props.history.push(`/articles/${article.article.article.slug}`);
       })
       .catch((errors) => {
         this.setState({
@@ -62,12 +59,12 @@ class EditArticle extends React.Component {
       });
   };
   componentDidMount() {
-    let { title, description, body, tagList } =
+    let { title, description, body, taglist } =
       this.props.location.state.article;
     this.setState({
       title: title,
       description: description,
-      tags: tagList.toString(),
+      tags: taglist ? taglist.toString() : "",
       body: body,
     });
   }
@@ -125,7 +122,7 @@ class EditArticle extends React.Component {
             ></input>
             <input
               type="submit"
-              value="Edit Article"
+              value="Update Article"
               className={`bg-blue-300 blue ${formControlClass} cursor-pointer`}
             ></input>
           </form>

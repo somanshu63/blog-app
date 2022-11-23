@@ -24,6 +24,7 @@ class Home extends React.Component {
       this.state.myfeed === true ? `&author=${this.state.author}` : "",
       this.state.activeIndex,
       this.handleArticlesData,
+      this.props.user ? this.props.user.token : "",
       this.state.openTag ? `tag=${this.state.openTag}&` : ""
     );
     this.setState({
@@ -54,6 +55,7 @@ class Home extends React.Component {
             this.state.myfeed === true ? `&author=${this.state.author}` : "",
             this.state.activeIndex,
             this.handleArticlesData,
+            this.props.user.token,
             this.state.openTag ? `tag=${this.state.openTag}&` : ""
           );
         }
@@ -65,25 +67,34 @@ class Home extends React.Component {
       <div className="main">
         <Hero />
         <div className="flex justify-end">
-          <div className="home w-2/4">
+          <div className="home w-3/5">
             <Feed
               handleState={this.handleState}
               openTag={this.state.openTag}
               author={this.state.author}
               myfeed={this.state.myfeed}
             />
-            <ArticlesFeed
-              articles={this.state.articles}
-              openTag={this.state.openTag}
-              user={this.props.user}
-              handleState={this.handleState}
-            />
-            <Pagination
-              handleState={this.handleState}
-              articlesCount={this.state.articlesCount}
-              activeIndex={this.state.activeIndex}
-            />
+            {this.state.error ? (
+              <p className="text-base capitalize text-center m-4">
+                {this.state.error}
+              </p>
+            ) : (
+              <>
+                <ArticlesFeed
+                  articles={this.state.articles}
+                  openTag={this.state.openTag}
+                  user={this.props.user}
+                  handleState={this.handleState}
+                />
+                <Pagination
+                  handleState={this.handleState}
+                  articlesCount={this.state.articlesCount}
+                  activeIndex={this.state.activeIndex}
+                />
+              </>
+            )}
           </div>
+
           <Sidebar handleState={this.handleState} tags={this.state.tags} />
         </div>
       </div>

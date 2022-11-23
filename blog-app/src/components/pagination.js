@@ -4,7 +4,7 @@ function Pagination(props) {
   let handleState = props.handleState;
   let num = [],
     count;
-  count = Math.floor(articlesCount / 10);
+  count = Math.ceil(articlesCount / 10);
   for (let i = 0; i < count; i++) {
     num.push(i + 1);
   }
@@ -23,7 +23,7 @@ function Pagination(props) {
                   activeIndex > 0 ? activeIndex - 1 : activeIndex
                 );
               }}
-              className={`text-sm py-1 px-2 text-green-600`}
+              className={`text-sm py-1 px-2 hover:scale-150 text-green-600`}
             >
               prev
             </button>
@@ -34,7 +34,7 @@ function Pagination(props) {
                   onClick={() => {
                     handleState("activeIndex", i);
                   }}
-                  className={`bg-none text-sm py-1 px-2 rounded-md border-solid border-2 border-green-600 m-1 ${
+                  className={`bg-none w-8 h-8 text-sm hover:scale-125 hover:text-white hover:bg-green-500 rounded-md border-solid border-2 border-green-600 m-1 ${
                     activeIndex === i ? "bg-green-600 text-white" : ""
                   }`}
                 >
@@ -49,7 +49,7 @@ function Pagination(props) {
                   activeIndex < count - 1 ? activeIndex + 1 : activeIndex
                 );
               }}
-              className={`text-sm py-1 px-2 text-green-600`}
+              className={`text-sm py-1 hover:scale-150 px-2 text-green-600`}
             >
               next
             </button>

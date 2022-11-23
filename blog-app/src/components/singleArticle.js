@@ -18,7 +18,13 @@ class Article extends React.Component {
   }
   fetchData = () => {
     const slug = this.props.match.params.slug;
-    fetch(`https://mighty-oasis-08080.herokuapp.com/api/articles/${slug}`)
+    fetch(`/api/articles/${slug}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `${this.props.user ? this.props.user.token : ""}`,
+      },
+    })
       .then((res) => {
         if (!res.ok) {
           throw new Error(res.statusText);
@@ -26,32 +32,10 @@ class Article extends React.Component {
         return res.json();
       })
       .then((article) => {
-        this.setState(
-          {
-            article: article,
-          },
-          () => {
-            fetch(
-              `https://mighty-oasis-08080.herokuapp.com/api/profiles/${this.state.article.article.author.username}`
-            )
-              .then((res) => {
-                if (!res.ok) {
-                  throw new Error(res.statusText);
-                }
-                return res.json();
-              })
-              .then((profile) => {
-                this.setState({
-                  profile: profile.profile,
-                });
-              })
-              .catch((err) => {
-                this.setState({
-                  error: "not able to fetch profile",
-                });
-              });
-          }
-        );
+        this.setState({
+          article: article.article,
+          profile: article.article.article.author,
+        });
       })
       .catch((err) => {
         this.setState({
@@ -60,16 +44,13 @@ class Article extends React.Component {
       });
   };
   deleteArticle = () => {
-    fetch(
-      `https://mighty-oasis-08080.herokuapp.com/api/articles/${this.state.article.article.slug}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Token ${this.props.user.token}`,
-        },
-      }
-    )
+    fetch(`/api/articles/${this.state.article.article.slug}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `${this.props.user.token}`,
+      },
+    })
       .then((res) => {
         if (!res.ok) {
           throw new Error("can't delete article");
@@ -83,16 +64,13 @@ class Article extends React.Component {
       });
   };
   followAuthor = () => {
-    fetch(
-      `https://mighty-oasis-08080.herokuapp.com/api/profiles/${this.state.profile.username}/follow`,
-      {
-        method: this.state.profile.following ? "DELETE" : "POST",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Token ${this.props.user.token}`,
-        },
-      }
-    )
+    fetch(`/api/profiles/${this.state.profile.username}/follow`, {
+      method: this.state.profile.following ? "DELETE" : "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `${this.props.user.token}`,
+      },
+    })
       .then((res) => {
         if (!res.ok) {
           throw new Error("can't follow author");
@@ -110,6 +88,36 @@ class Article extends React.Component {
         });
       });
   };
+  favoriteArticle = (slug) => {
+    if (this.props.user) {
+      fetch(`/api/articles/${slug}/favorite`, {
+        method: this.state.article.article.favorited ? "DELETE" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `${this.props.user.token}`,
+        },
+      })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error("can't mark as favorite article");
+          }
+          return res.json();
+        })
+        .then((article) => {
+          console.log(article);
+          this.setState({
+            article: article.article,
+          });
+        })
+        .catch((errors) => {
+          this.setState({
+            error: errors.error,
+          });
+        });
+    } else {
+      alert("you have to log in first");
+    }
+  };
   render() {
     let article, author;
     if (this.state.article) {
@@ -122,9 +130,11 @@ class Article extends React.Component {
               src={article.author.image}
               alt={article.author.username}
             ></img>
-            <address className="text text-xl blue capitalize">
-              {article.author.username}
-            </address>
+            <NavLink to={`/profiles/${article.author.username}`}>
+              <address className="text hover:underline hover:scale-110 text-xl pink capitalize">
+                {article.author.username}
+              </address>
+            </NavLink>
           </div>
           {this.props.user &&
           this.props.user.username ===
@@ -139,13 +149,13 @@ class Article extends React.Component {
                     },
                   });
                 }}
-                className="text-sm blue border-2 border-blue-900 mx-2 py-1 px-2 rounded-md"
+                className="text-sm hover:scale-110 blue border-2 border-blue-900 mx-2 py-1 px-2 rounded-md"
               >
                 <i className="mr-1 fa-solid fa-pen-to-square"></i>Edit Article
               </button>
               <button
                 onClick={this.deleteArticle}
-                className="text-sm text-red-600 border-2 border-red-600 mx-2 py-1 px-2 rounded-md"
+                className="text-sm hover:scale-110 text-red-600 border-2 border-red-600 mx-2 py-1 px-2 rounded-md"
               >
                 <i className="mr-1 fa-solid fa-trash"></i>Delete Article
               </button>
@@ -159,7 +169,7 @@ class Article extends React.Component {
               this.state.article.article.author.username ? (
                 <button
                   onClick={this.followAuthor}
-                  className={`text-sm border-2 mx-2 mt-4 py-1 px-2 rounded-md ${
+                  className={`text-sm hover:scale-110 border-2 mx-2 mt-4 py-1 px-2 rounded-md ${
                     this.state.profile && this.state.profile.following
                       ? "text-red-600 border-red-600"
                       : "text-green-600 border-green-600"
@@ -174,7 +184,7 @@ class Article extends React.Component {
               )
             ) : (
               <NavLink to={"/login"}>
-                <p className="text-base m-4 text-center">
+                <p className="text-base m-4 text-black text-center">
                   <span className="text-green-500">SignIn/SignUp</span> to
                   follow
                   <span className="blue"> Author</span>
@@ -190,23 +200,35 @@ class Article extends React.Component {
       <div>
         {this.state.article ? (
           <>
-            <Hero title={article.title} description={author} />
+            <Hero
+              title={article.title}
+              description={author}
+              followAuthor={this.followAuthor}
+            />
             <div className="mx-8 my-4">
               <p className="text-lg py-4">{article.description}</p>
               <p className="text-lg py-4">{article.body}</p>
-              <p className="text-base py-4">
-                {article.tagList.length > 0 ? `Tags: ${article.tagList}` : ""}
+              <p className="text-base capitalize py-4">
+                {article.taglist.length > 0 ? `Tags: ${article.taglist}` : ""}
               </p>
               <div>
-                <a
-                  href="/"
-                  className="rounded-lg my-4 inline-block border-solid border-2 border-green-600 py-1 px-2"
+                <button
+                  onClick={() => {
+                    this.favoriteArticle(article.slug);
+                  }}
+                  className={`rounded-lg hover:scale-125 border-solid border-2 ${
+                    article.favorited ? "border-red-600" : "border-green-600"
+                  } py-1 px-2`}
                 >
-                  💚{" "}
-                  <span className="text-sm text-green-600">
+                  {article.favorited ? `❤️ ` : `💚 `}
+                  <span
+                    className={`text-sm ${
+                      article.favorited ? "text-red-600" : "text-green-600"
+                    }`}
+                  >
                     {article.favoritesCount}
                   </span>
-                </a>
+                </button>
               </div>
               <hr></hr>
               <Comment

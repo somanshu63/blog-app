@@ -35,7 +35,7 @@ class Login extends React.Component {
     }
   };
   login = () => {
-    fetch(`https://mighty-oasis-08080.herokuapp.com/api/users/login`, {
+    fetch(`/api/users/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -104,7 +104,7 @@ class Login extends React.Component {
                 this.login();
               }}
             >
-              <span className="text-lg text-red-600 py-1">{email}</span>
+              <span className="text-xs text-red-600 py-1">{email}</span>
               <input
                 placeholder="Enter Email"
                 onChange={this.handleInput}
@@ -113,7 +113,7 @@ class Login extends React.Component {
                 name="email"
                 value={Email}
               ></input>
-              <span className="text-lg text-red-600 py-1">{password}</span>
+              <span className="text-xs text-red-600 py-1">{password}</span>
               <input
                 placeholder="Enter Password"
                 onChange={this.handleInput}
@@ -123,7 +123,11 @@ class Login extends React.Component {
                 className="text-lg rounded-md w-70 py-1 px-4 my-2 border-2 border-solid border-blue-900 text-blue-900"
               ></input>
               <input
-                className="text-lg cursor-pointer rounded-md w-70 py-1 px-4 my-2 border-2 border-solid border-green-900 text-green-900 bg-green-100"
+                className={`text-lg cursor-pointer rounded-md w-70 py-1 px-4 my-2 border-2 border-solid ${
+                  !this.state.email || !this.state.password
+                    ? "border-red-500 text-red-500 bg-red-300"
+                    : "border-green-700 text-green-700 bg-green-200"
+                }`}
                 type="submit"
                 value="Login"
                 disabled={email || password}
