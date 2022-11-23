@@ -4,6 +4,7 @@ import Sidebar from "./sidebar";
 import ArticlesFeed from "./articlesFeed";
 import Feed from "./feed";
 import Pagination from "./pagination";
+import fetchData from "../utils/fetchData";
 
 class Home extends React.Component {
   constructor() {
@@ -19,40 +20,20 @@ class Home extends React.Component {
     };
   }
   componentDidMount() {
-    this.fetchData();
+    fetchData(
+      this.state.myfeed === true ? `&author=${this.state.author}` : "",
+      this.state.activeIndex,
+      this.handleArticlesData,
+      this.state.openTag ? `tag=${this.state.openTag}&` : ""
+    );
     this.setState({
       author: this.props.author,
     });
   }
-  fetchData = () => {
-    const tag = this.state.openTag ? `tag=${this.state.openTag}&` : "";
-    let authorFilter;
-    if (this.state.myfeed === true) {
-      authorFilter = `&author=${this.state.author}`;
-    }
-
-    fetch(
-      `https://mighty-oasis-08080.herokuapp.com/api/articles?${tag}limit=10&offset=${
-        this.state.activeIndex * 10
-      }${authorFilter ? authorFilter : ""}`
-    )
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(res.statusText);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        this.setState({
-          articles: data.articles,
-          articlesCount: data.articlesCount,
-        });
-      })
-      .catch((err) => {
-        this.setState({
-          error: "not able to fetch articles",
-        });
-      });
+  handleArticlesData = (key, value) => {
+    this.setState({
+      [key]: value,
+    });
   };
   handleState = (key, value) => {
     this.setState(
@@ -69,7 +50,12 @@ class Home extends React.Component {
           key === "activeIndex" ||
           key === "myfeed"
         ) {
-          this.fetchData();
+          fetchData(
+            this.state.myfeed === true ? `&author=${this.state.author}` : "",
+            this.state.activeIndex,
+            this.handleArticlesData,
+            this.state.openTag ? `tag=${this.state.openTag}&` : ""
+          );
         }
       }
     );

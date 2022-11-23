@@ -34,11 +34,13 @@ function ArticleFeed(props) {
       <div className="w-4/5">
         <h3 className="text-2xl pink">{article.title}</h3>
         <div className="flex py-2 items-center">
-          <img
-            className="h-8 w-8 mr-2 rounded-full"
-            src={article.author.image}
-            alt={article.author.username}
-          ></img>
+          <NavLink to={`/profiles/${article.author.username}`}>
+            <img
+              className="h-8 w-8 mr-2 rounded-full"
+              src={article.author.image}
+              alt={article.author.username}
+            ></img>
+          </NavLink>
           <h4 className="blue">{article.author.username}</h4>
         </div>
         <p className="text-l py-2">{article.description}</p>

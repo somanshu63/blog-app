@@ -33,7 +33,13 @@ class Header extends React.Component {
               >
                 Settings
               </NavLink>
-              <address className="capitalize creme">{user.username}</address>
+              <NavLink
+                activeClassName="active"
+                to={`/profiles/${user.username}`}
+                className="capitalize creme  text-base mx-4"
+              >
+                {user.username}
+              </NavLink>
               <a
                 href="/login"
                 onClick={() => {
