@@ -1,5 +1,6 @@
 import React from "react";
 import { NavLink, withRouter } from "react-router-dom";
+import baseurl from "../utils/constants";
 import Loader from "./loader";
 
 class ArticlesFeed extends React.Component {
@@ -24,7 +25,7 @@ class ArticlesFeed extends React.Component {
   }
   favoriteArticle = (slug, favorited) => {
     if (this.state.user) {
-      fetch(`/api/articles/${slug}/favorite`, {
+      fetch(`${baseurl}/api/articles/${slug}/favorite`, {
         method: favorited ? "DELETE" : "POST",
         headers: {
           "Content-Type": "application/json",

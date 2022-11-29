@@ -12,6 +12,7 @@ import Profile from "./profile";
 import Settings from "./settings";
 import NewPost from "./newPost";
 import EditArticle from "./editArticle";
+import baseurl from "../utils/constants";
 
 class App extends React.Component {
   state = {
@@ -25,7 +26,7 @@ class App extends React.Component {
       this.setState({
         verified: "verifying",
       });
-      fetch("/api/user", {
+      fetch(`${baseurl}/api/user`, {
         method: "GET",
         headers: {
           authorization: `${token}`,

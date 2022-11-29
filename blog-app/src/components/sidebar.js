@@ -1,4 +1,5 @@
 import React from "react";
+import baseurl from "../utils/constants";
 import Loader from "./loader";
 
 class Sidebar extends React.Component {
@@ -10,7 +11,7 @@ class Sidebar extends React.Component {
     };
   }
   componentDidMount() {
-    fetch(`/api/tags`)
+    fetch(`${baseurl}/api/tags`)
       .then((res) => {
         if (!res.ok) {
           throw new Error(res.statusText);

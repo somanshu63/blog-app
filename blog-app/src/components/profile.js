@@ -5,6 +5,7 @@ import fetchData from "../utils/fetchData";
 import HeroProfile from "./heroProfile";
 import { withRouter } from "react-router-dom";
 import Loader from "./loader";
+import baseurl from "../utils/constants";
 let url;
 
 class Profile extends React.Component {
@@ -21,12 +22,12 @@ class Profile extends React.Component {
     };
   }
   componentDidMount() {
-    url = `/api/profiles/${this.props.match.params.username}`;
+    url = `${baseurl}/api/profiles/${this.props.match.params.username}`;
     this.fetch(url);
   }
   componentDidUpdate() {
     if (this.props.match.params.username !== this.state.currentUsername) {
-      url = `/api/profiles/${this.props.match.params.username}`;
+      url = `${baseurl}/api/profiles/${this.props.match.params.username}`;
       this.fetch(url);
     }
   }

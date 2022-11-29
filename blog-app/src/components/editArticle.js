@@ -1,5 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
+import baseurl from "../utils/constants";
 
 class EditArticle extends React.Component {
   constructor() {
@@ -28,7 +29,7 @@ class EditArticle extends React.Component {
   };
   editArticle = () => {
     let { title, description, tags, body } = this.state;
-    fetch(`/api/articles/${this.props.location.state.article.slug}`, {
+    fetch(`${baseurl}/api/articles/${this.props.location.state.article.slug}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

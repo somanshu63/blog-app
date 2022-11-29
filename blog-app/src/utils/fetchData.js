@@ -1,14 +1,21 @@
+import baseurl from "./constants";
+
 export default function fetchData(filter, activeIndex, fn, token, tag) {
   let Tag = tag ? tag : "";
   let Filter = filter ? filter : "";
 
-  fetch(`/api/articles?${Tag}limit=10&offset=${activeIndex * 10}${Filter}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      authorization: token,
-    },
-  })
+  fetch(
+    `${baseurl}/api/articles?${Tag}limit=10&offset=${
+      activeIndex * 10
+    }${Filter}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: token,
+      },
+    }
+  )
     .then((res) => {
       if (!res.ok) {
         throw new Error(res.statusText);
@@ -26,7 +33,7 @@ export default function fetchData(filter, activeIndex, fn, token, tag) {
     .catch((err) => {
       fn("error", "not able to fetch data");
     });
-  fetch(`/api/articles?${Tag}${Filter}`)
+  fetch(`${baseurl}/api/articles?${Tag}${Filter}`)
     .then((res) => {
       if (!res.ok) {
         throw new Error(res.statusText);
