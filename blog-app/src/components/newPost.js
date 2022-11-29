@@ -1,5 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
+import baseurl from "../utils/constants";
 
 class NewPost extends React.Component {
   constructor() {
@@ -30,7 +31,7 @@ class NewPost extends React.Component {
   };
   addArticle = () => {
     let { title, description, tags, body } = this.state;
-    fetch(`/api/articles`, {
+    fetch(`${baseurl}/api/articles`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

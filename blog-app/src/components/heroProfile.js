@@ -1,5 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import baseurl from "../utils/constants";
 
 class HeroProfile extends React.Component {
   state = {
@@ -13,7 +14,7 @@ class HeroProfile extends React.Component {
     });
   }
   followAuthor = () => {
-    fetch(`/api/profiles/${this.state.user.username}/follow`, {
+    fetch(`${baseurl}/api/profiles/${this.state.user.username}/follow`, {
       method: this.state.user.following ? "DELETE" : "POST",
       headers: {
         "Content-Type": "application/json",

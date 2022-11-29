@@ -1,5 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import baseurl from "../utils/constants";
 let commentUrl;
 
 export default class Comment extends React.Component {
@@ -26,7 +27,7 @@ export default class Comment extends React.Component {
     }
   };
   componentDidMount() {
-    commentUrl = `/api/articles/${this.props.slug}/comments`;
+    commentUrl = `${baseurl}/api/articles/${this.props.slug}/comments`;
     this.fetchComments();
   }
   addComment = () => {

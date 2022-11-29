@@ -1,5 +1,6 @@
 import React from "react";
 import { NavLink, withRouter } from "react-router-dom";
+import baseurl from "../utils/constants";
 import validate from "../utils/validate";
 
 class Signup extends React.Component {
@@ -35,7 +36,7 @@ class Signup extends React.Component {
     }
   };
   signUp = () => {
-    fetch(`/api/users`, {
+    fetch(`${baseurl}/api/users`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

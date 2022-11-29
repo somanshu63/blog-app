@@ -1,4 +1,5 @@
 import React from "react";
+import baseurl from "../utils/constants";
 import validate from "../utils/validate";
 
 class Settings extends React.Component {
@@ -35,7 +36,7 @@ class Settings extends React.Component {
   updateDetails = () => {
     let Password = this.state.password ? `password: this.state.password` : "";
     let { imageURL, username, bio, email } = this.state;
-    fetch(`/api/user`, {
+    fetch(`${baseurl}/api/user`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
