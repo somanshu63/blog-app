@@ -1,5 +1,6 @@
 import React from "react";
 import { NavLink, withRouter } from "react-router-dom";
+import baseurl from "../utils/constants";
 import Comment from "./comment";
 import Hero from "./hero";
 import Loader from "./loader";
@@ -18,7 +19,7 @@ class Article extends React.Component {
   }
   fetchData = () => {
     const slug = this.props.match.params.slug;
-    fetch(`/api/articles/${slug}`, {
+    fetch(`${baseurl}/api/articles/${slug}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -44,7 +45,7 @@ class Article extends React.Component {
       });
   };
   deleteArticle = () => {
-    fetch(`/api/articles/${this.state.article.article.slug}`, {
+    fetch(`${baseurl}/api/articles/${this.state.article.article.slug}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -64,7 +65,7 @@ class Article extends React.Component {
       });
   };
   followAuthor = () => {
-    fetch(`/api/profiles/${this.state.profile.username}/follow`, {
+    fetch(`${baseurl}/api/profiles/${this.state.profile.username}/follow`, {
       method: this.state.profile.following ? "DELETE" : "POST",
       headers: {
         "Content-Type": "application/json",
@@ -90,7 +91,7 @@ class Article extends React.Component {
   };
   favoriteArticle = (slug) => {
     if (this.props.user) {
-      fetch(`/api/articles/${slug}/favorite`, {
+      fetch(`${baseurl}/api/articles/${slug}/favorite`, {
         method: this.state.article.article.favorited ? "DELETE" : "POST",
         headers: {
           "Content-Type": "application/json",

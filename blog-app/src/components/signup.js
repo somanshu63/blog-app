@@ -36,6 +36,7 @@ class Signup extends React.Component {
     }
   };
   signUp = () => {
+    console.log(`${baseurl}/api/users`);
     fetch(`${baseurl}/api/users`, {
       method: "POST",
       headers: {
@@ -50,6 +51,7 @@ class Signup extends React.Component {
       }),
     })
       .then((res) => {
+        console.log(res);
         if (!res.ok) {
           return res.json().then(({ errors }) => {
             return Promise.reject(errors);
