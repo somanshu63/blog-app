@@ -86,11 +86,15 @@ class Home extends React.Component {
                   user={this.props.user}
                   handleState={this.handleState}
                 />
-                <Pagination
-                  handleState={this.handleState}
-                  articlesCount={this.state.articlesCount}
-                  activeIndex={this.state.activeIndex}
-                />
+                {this.state.articles ? (
+                  <Pagination
+                    handleState={this.handleState}
+                    articlesCount={this.state.articlesCount}
+                    activeIndex={this.state.activeIndex}
+                  />
+                ) : (
+                  ""
+                )}
               </>
             )}
           </div>

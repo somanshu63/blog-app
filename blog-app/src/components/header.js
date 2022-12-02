@@ -40,8 +40,8 @@ class Header extends React.Component {
               >
                 {user.username}
               </NavLink>
-              <a
-                href="/login"
+              <NavLink
+                to="/login"
                 onClick={() => {
                   localStorage.removeItem("userToken");
                   this.props.handleLogIn(null);
@@ -49,7 +49,7 @@ class Header extends React.Component {
                 className="cursor-pointer capitalize hover:scale-125 text-white text-base mx-4"
               >
                 logout
-              </a>
+              </NavLink>
             </>
           ) : (
             <>

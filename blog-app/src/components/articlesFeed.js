@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink, withRouter } from "react-router-dom";
 import baseurl from "../utils/constants";
-import Loader from "./loader";
+import Loading from "./loading";
 
 class ArticlesFeed extends React.Component {
   state = {
@@ -79,7 +79,7 @@ class ArticlesFeed extends React.Component {
             no articles to show
           </p>
         ) : (
-          <Loader />
+          <Loading />
         )}
       </section>
     );

@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink, withRouter } from "react-router-dom";
 import baseurl from "../utils/constants";
 import validate from "../utils/validate";
+import Loading from "./loading";
 
 class Login extends React.Component {
   constructor() {
@@ -79,8 +80,8 @@ class Login extends React.Component {
     return (
       <>
         {this.state.loading ? (
-          <div className="flex justify-center">
-            <div className=" loader m-12"></div>
+          <div className="h-screen flex items-center justify-center">
+            <Loading />
           </div>
         ) : (
           <div className="login flex-col p-12 flex justify-center items-center">
