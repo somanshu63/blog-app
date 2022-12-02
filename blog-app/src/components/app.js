@@ -95,13 +95,6 @@ class App extends React.Component {
 function Authenticated(props) {
   return (
     <Switch>
-      <Route exact path="/">
-        <Home
-          loggedIn={props.loggedIn}
-          author={props.user.username}
-          user={props.user}
-        />
-      </Route>
       <Route path="/new-post">
         <NewPost token={props.user.token} />
       </Route>
@@ -121,6 +114,13 @@ function Authenticated(props) {
       <Route path="/edit-article">
         <EditArticle user={props.user} />
       </Route>
+      <Route exact path="/">
+        <Home
+          loggedIn={props.loggedIn}
+          author={props.user.username}
+          user={props.user}
+        />
+      </Route>
       <Route path="*">
         <NoMatch />
       </Route>
@@ -130,9 +130,6 @@ function Authenticated(props) {
 function Unauthenticated(props) {
   return (
     <Switch>
-      <Route exact path="/">
-        <Home />
-      </Route>
       <Route path="/signup">
         <Signup handleLogIn={props.handleLogIn} />
       </Route>
@@ -142,6 +139,9 @@ function Unauthenticated(props) {
       <Route path="/articles/:slug" component={Article}></Route>
       <Route path="/profiles/:username">
         <Profile user={props.user} />
+      </Route>
+      <Route exact path="/">
+        <Home />
       </Route>
       <Route path="*">
         <NoMatch />
