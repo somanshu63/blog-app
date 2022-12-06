@@ -1,6 +1,6 @@
 import React from "react";
 import baseurl from "../utils/constants";
-import Loader from "./loader";
+import Loading from "./loading";
 
 class Sidebar extends React.Component {
   constructor(props) {
@@ -45,7 +45,9 @@ class Sidebar extends React.Component {
               );
             })
           ) : (
-            <Loader fontSize={"text-lg"} />
+            <div className="mx-auto">
+              <Loading />
+            </div>
           )}
         </div>
       </div>

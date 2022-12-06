@@ -55,7 +55,7 @@ class Home extends React.Component {
             this.state.myfeed === true ? `&author=${this.state.author}` : "",
             this.state.activeIndex,
             this.handleArticlesData,
-            this.props.user.token,
+            this.props && this.props.user ? this.props.user.token : "",
             this.state.openTag ? `tag=${this.state.openTag}&` : ""
           );
         }
