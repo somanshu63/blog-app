@@ -13,6 +13,7 @@ import Settings from "./settings";
 import NewPost from "./newPost";
 import EditArticle from "./editArticle";
 import baseurl from "../utils/constants";
+import ErrorBoundary from "./errorBoundary";
 
 class App extends React.Component {
   state = {
@@ -71,7 +72,9 @@ class App extends React.Component {
           </>
         ) : (
           <div className="container font-sans">
-            <Header handleLogIn={this.handleLogIn} user={this.state.user} />
+            <ErrorBoundary message="Error occured while loading header. Please reload the page">
+              <Header handleLogIn={this.handleLogIn} user={this.state.user} />
+            </ErrorBoundary>
             {this.state.loggedIn ? (
               <Authenticated
                 user={user}
@@ -96,30 +99,42 @@ function Authenticated(props) {
   return (
     <Switch>
       <Route exact path="/">
-        <Home
-          loggedIn={props.loggedIn}
-          author={props.user.username}
-          user={props.user}
-        />
+        <ErrorBoundary message="Error occured while fetching articles. Please reload the page">
+          <Home
+            loggedIn={props.loggedIn}
+            author={props.user.username}
+            user={props.user}
+          />
+        </ErrorBoundary>
       </Route>
       <Route path="/new-post">
-        <NewPost token={props.user.token} />
+        <ErrorBoundary message="Error occured while opening new article form. Please reload the page">
+          <NewPost token={props.user.token} />
+        </ErrorBoundary>
       </Route>
       <Route path="/settings">
-        <Settings
-          user={props.user}
-          token={props.user.token}
-          updateUser={props.updateUser}
-        />
+        <ErrorBoundary message="Error occured while fetching details of user. Please reload the page">
+          <Settings
+            user={props.user}
+            token={props.user.token}
+            updateUser={props.updateUser}
+          />
+        </ErrorBoundary>
       </Route>
       <Route path="/profiles/:username">
-        <Profile user={props.user} />
+        <ErrorBoundary message="Error occured while fetching the profile of the user. Please reload the page">
+          <Profile user={props.user} />
+        </ErrorBoundary>
       </Route>
       <Route path="/articles/:slug">
-        <Article user={props.user} />
+        <ErrorBoundary message="Error occured while fetching article. Please reload the page">
+          <Article user={props.user} />
+        </ErrorBoundary>
       </Route>
       <Route path="/edit-article">
-        <EditArticle user={props.user} />
+        <ErrorBoundary message="Error occured while fetching article's details. Please reload the page">
+          <EditArticle user={props.user} />
+        </ErrorBoundary>
       </Route>
       <Route path="*">
         <NoMatch />
@@ -131,17 +146,25 @@ function Unauthenticated(props) {
   return (
     <Switch>
       <Route exact path="/">
-        <Home />
+        <ErrorBoundary message="Error occured while fetching articles. Please reload the page">
+          <Home />
+        </ErrorBoundary>
       </Route>
       <Route path="/signup">
-        <Signup handleLogIn={props.handleLogIn} />
+        <ErrorBoundary message="Error occured while signing up. Please reload the page">
+          <Signup handleLogIn={props.handleLogIn} />
+        </ErrorBoundary>
       </Route>
       <Route path="/login">
-        <Login handleLogIn={props.handleLogIn} />
+        <ErrorBoundary message="Error occured while loging in. Please reload the page">
+          <Login handleLogIn={props.handleLogIn} />
+        </ErrorBoundary>
       </Route>
       <Route path="/articles/:slug" component={Article}></Route>
       <Route path="/profiles/:username">
-        <Profile user={props.user} />
+        <ErrorBoundary message="Error occured while fetching the profile of the user. Please reload the page">
+          <Profile user={props.user} />
+        </ErrorBoundary>
       </Route>
       <Route path="*">
         <NoMatch />

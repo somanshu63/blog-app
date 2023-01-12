@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink, withRouter } from "react-router-dom";
 import baseurl from "../utils/constants";
 import Comment from "./comment";
+import ErrorBoundary from "./errorBoundary";
 import Hero from "./hero";
 import Loader from "./loader";
 
@@ -232,10 +233,12 @@ class Article extends React.Component {
                 </button>
               </div>
               <hr></hr>
-              <Comment
-                user={this.props.user}
-                slug={this.props.match.params.slug}
-              />
+              <ErrorBoundary message="Error occured while comments of this article. Please reload the page">
+                <Comment
+                  user={this.props.user}
+                  slug={this.props.match.params.slug}
+                />
+              </ErrorBoundary>
             </div>
           </>
         ) : this.state.error ? (

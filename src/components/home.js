@@ -5,6 +5,7 @@ import ArticlesFeed from "./articlesFeed";
 import Feed from "./feed";
 import Pagination from "./pagination";
 import fetchData from "../utils/fetchData";
+import ErrorBoundary from "./errorBoundary";
 
 class Home extends React.Component {
   constructor() {
@@ -98,8 +99,9 @@ class Home extends React.Component {
               </>
             )}
           </div>
-
-          <Sidebar handleState={this.handleState} tags={this.state.tags} />
+          <ErrorBoundary message="Error occured while fetching tags. Please reload the page">
+            <Sidebar handleState={this.handleState} tags={this.state.tags} />
+          </ErrorBoundary>
         </div>
       </div>
     );
