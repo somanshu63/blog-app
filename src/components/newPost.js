@@ -1,8 +1,10 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import baseurl from "../utils/constants";
+import { userContext } from "./userContext";
 
 class NewPost extends React.Component {
+  static contextType = userContext;
   constructor() {
     super();
     this.state = {
@@ -35,7 +37,7 @@ class NewPost extends React.Component {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        authorization: `${this.props.token}`,
+        authorization: `${this.context.user.token}`,
       },
       body: JSON.stringify({
         article: {

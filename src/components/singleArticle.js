@@ -5,8 +5,10 @@ import Comment from "./comment";
 import ErrorBoundary from "./errorBoundary";
 import Hero from "./hero";
 import Loader from "./loader";
+import { userContext } from "./userContext";
 
 class Article extends React.Component {
+  static contextType = userContext;
   constructor(props) {
     super(props);
     this.state = {
@@ -24,7 +26,7 @@ class Article extends React.Component {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        authorization: `${this.props.user ? this.props.user.token : ""}`,
+        authorization: `${this.context.user ? this.context.user.token : ""}`,
       },
     })
       .then((res) => {
@@ -50,7 +52,7 @@ class Article extends React.Component {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        authorization: `${this.props.user.token}`,
+        authorization: `${this.context.user.token}`,
       },
     })
       .then((res) => {
@@ -70,7 +72,7 @@ class Article extends React.Component {
       method: this.state.profile.following ? "DELETE" : "POST",
       headers: {
         "Content-Type": "application/json",
-        authorization: `${this.props.user.token}`,
+        authorization: `${this.context.user.token}`,
       },
     })
       .then((res) => {
@@ -91,12 +93,12 @@ class Article extends React.Component {
       });
   };
   favoriteArticle = (slug) => {
-    if (this.props.user) {
+    if (this.context.user) {
       fetch(`${baseurl}/api/articles/${slug}/favorite`, {
         method: this.state.article.article.favorited ? "DELETE" : "POST",
         headers: {
           "Content-Type": "application/json",
-          authorization: `${this.props.user.token}`,
+          authorization: `${this.context.user.token}`,
         },
       })
         .then((res) => {
@@ -138,8 +140,8 @@ class Article extends React.Component {
               </address>
             </NavLink>
           </div>
-          {this.props.user &&
-          this.props.user.username ===
+          {this.context.user &&
+          this.context.user.username ===
             this.state.article.article.author.username ? (
             <div className="flex mt-4">
               <button
@@ -166,8 +168,8 @@ class Article extends React.Component {
             ""
           )}
           <div className="items-center">
-            {this.props.user ? (
-              this.props.user.username !==
+            {this.context.user ? (
+              this.context.user.username !==
               this.state.article.article.author.username ? (
                 <button
                   onClick={this.followAuthor}
@@ -235,7 +237,7 @@ class Article extends React.Component {
               <hr></hr>
               <ErrorBoundary message="Error occured while comments of this article. Please reload the page">
                 <Comment
-                  user={this.props.user}
+                  user={this.context.user}
                   slug={this.props.match.params.slug}
                 />
               </ErrorBoundary>

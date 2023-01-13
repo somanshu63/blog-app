@@ -6,6 +6,7 @@ import Feed from "./feed";
 import Pagination from "./pagination";
 import fetchData from "../utils/fetchData";
 import ErrorBoundary from "./errorBoundary";
+import { userContext } from "./userContext";
 
 class Home extends React.Component {
   constructor() {
@@ -25,12 +26,14 @@ class Home extends React.Component {
       this.state.myfeed === true ? `&author=${this.state.author}` : "",
       this.state.activeIndex,
       this.handleArticlesData,
-      this.props.user ? this.props.user.token : "",
+      this.context.user ? this.context.user.token : "",
       this.state.openTag ? `tag=${this.state.openTag}&` : ""
     );
-    this.setState({
-      author: this.props.author,
-    });
+    if (this.context.user) {
+      this.setState({
+        author: this.context.user.username,
+      });
+    }
   }
   handleArticlesData = (key, value) => {
     this.setState({
@@ -56,13 +59,14 @@ class Home extends React.Component {
             this.state.myfeed === true ? `&author=${this.state.author}` : "",
             this.state.activeIndex,
             this.handleArticlesData,
-            this.props && this.props.user ? this.props.user.token : "",
+            this.props && this.context.user ? this.context.user.token : "",
             this.state.openTag ? `tag=${this.state.openTag}&` : ""
           );
         }
       }
     );
   };
+  static contextType = userContext;
   render() {
     return (
       <div className="main">
@@ -84,7 +88,7 @@ class Home extends React.Component {
                 <ArticlesFeed
                   articles={this.state.articles}
                   openTag={this.state.openTag}
-                  user={this.props.user}
+                  user={this.context.user}
                   handleState={this.handleState}
                 />
                 {this.state.articles ? (
