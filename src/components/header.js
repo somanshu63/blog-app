@@ -1,10 +1,12 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { userContext } from "./userContext";
 
 class Header extends React.Component {
-  render() {
-    const user = this.props.user;
+  static contextType = userContext;
 
+  render() {
+    const user = this.context.user;
     return (
       <div className="py-2 px-4 flex justify-between items-center bg-blue">
         <h2 className="text-xl pink">Blog App</h2>

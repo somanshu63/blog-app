@@ -1,8 +1,10 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import baseurl from "../utils/constants";
+import { userContext } from "./userContext";
 
 class EditArticle extends React.Component {
+  static contextType = userContext;
   constructor() {
     super();
     this.state = {
@@ -33,7 +35,7 @@ class EditArticle extends React.Component {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        authorization: `${this.props.user.token}`,
+        authorization: `${this.context.user.token}`,
       },
       body: JSON.stringify({
         article: {

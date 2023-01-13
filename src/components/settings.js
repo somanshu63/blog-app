@@ -1,8 +1,10 @@
 import React from "react";
 import baseurl from "../utils/constants";
 import validate from "../utils/validate";
+import { userContext } from "./userContext";
 
 class Settings extends React.Component {
+  static contextType = userContext;
   constructor() {
     super();
     this.state = {
@@ -15,7 +17,7 @@ class Settings extends React.Component {
     };
   }
   componentDidMount() {
-    let { image, username, bio, email } = this.props.user;
+    let { image, username, bio, email } = this.context.user;
     this.setState({
       username: username,
       email: email,
@@ -40,7 +42,7 @@ class Settings extends React.Component {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        authorization: `${this.props.token}`,
+        authorization: `${this.context.user.token}`,
       },
       body: JSON.stringify({
         user: {

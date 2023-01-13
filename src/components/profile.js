@@ -6,9 +6,11 @@ import HeroProfile from "./heroProfile";
 import { withRouter } from "react-router-dom";
 import Loader from "./loader";
 import baseurl from "../utils/constants";
+import { userContext } from "./userContext";
 let url;
 
 class Profile extends React.Component {
+  static contextType = userContext;
   constructor() {
     super();
     this.state = {
@@ -35,10 +37,14 @@ class Profile extends React.Component {
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
+        if (this.context.user) {
+          this.setState({
+            currentUser: this.context.user.username,
+          });
+        }
         this.setState(
           {
-            currentUsername: this.props.match.params.username,
-            currentUser: this.props.user,
+            currentUsername: data.profile.username,
             user: data.profile,
           },
           () => {
@@ -48,7 +54,7 @@ class Profile extends React.Component {
                 : `&favorited=${this.state.user.username}`,
               0,
               this.handleState,
-              this.props.user.token
+              this.context.user ? this.context.user.token : ""
             );
           }
         );
@@ -68,7 +74,7 @@ class Profile extends React.Component {
               : `&favorited=${this.state.user.username}`,
             0,
             this.handleState,
-            this.props.user.token
+            this.context.user.token
           );
         }
       }
@@ -101,7 +107,7 @@ class Profile extends React.Component {
               <ArticlesFeed
                 handleState={this.handleState}
                 myfeed={this.state.myfeed}
-                user={this.props.user}
+                user={this.context.user}
                 error={this.state.error}
                 articles={this.state.articles}
                 openTag={this.state.openTag}

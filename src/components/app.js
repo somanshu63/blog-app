@@ -14,6 +14,7 @@ import NewPost from "./newPost";
 import EditArticle from "./editArticle";
 import baseurl from "../utils/constants";
 import ErrorBoundary from "./errorBoundary";
+import { userContext } from "./userContext";
 
 class App extends React.Component {
   state = {
@@ -60,7 +61,8 @@ class App extends React.Component {
   };
   render() {
     const user = this.state.user;
-
+    const loggedIn = this.state.loggedIn;
+    const contextData = { user, loggedIn };
     return (
       <>
         {this.state.verified === "verifying" ? (
@@ -72,22 +74,16 @@ class App extends React.Component {
           </>
         ) : (
           <div className="container font-sans">
-            <ErrorBoundary message="Error occured while loading header. Please reload the page">
-              <Header handleLogIn={this.handleLogIn} user={this.state.user} />
-            </ErrorBoundary>
-            {this.state.loggedIn ? (
-              <Authenticated
-                user={user}
-                loggedIn={this.state.loggedIn}
-                updateUser={this.updateUser}
-              />
-            ) : (
-              <Unauthenticated
-                user={user}
-                loggedIn={this.state.loggedIn}
-                handleLogIn={this.handleLogIn}
-              />
-            )}
+            <userContext.Provider value={contextData}>
+              <ErrorBoundary message="Error occured while loading header. Please reload the page">
+                <Header handleLogIn={this.handleLogIn} />
+              </ErrorBoundary>
+              {this.state.loggedIn ? (
+                <Authenticated updateUser={this.updateUser} />
+              ) : (
+                <Unauthenticated handleLogIn={this.handleLogIn} />
+              )}
+            </userContext.Provider>
           </div>
         )}
       </>
@@ -100,40 +96,32 @@ function Authenticated(props) {
     <Switch>
       <Route exact path="/">
         <ErrorBoundary message="Error occured while fetching articles. Please reload the page">
-          <Home
-            loggedIn={props.loggedIn}
-            author={props.user.username}
-            user={props.user}
-          />
+          <Home />
         </ErrorBoundary>
       </Route>
       <Route path="/new-post">
         <ErrorBoundary message="Error occured while opening new article form. Please reload the page">
-          <NewPost token={props.user.token} />
+          <NewPost />
         </ErrorBoundary>
       </Route>
       <Route path="/settings">
         <ErrorBoundary message="Error occured while fetching details of user. Please reload the page">
-          <Settings
-            user={props.user}
-            token={props.user.token}
-            updateUser={props.updateUser}
-          />
+          <Settings updateUser={props.updateUser} />
         </ErrorBoundary>
       </Route>
       <Route path="/profiles/:username">
         <ErrorBoundary message="Error occured while fetching the profile of the user. Please reload the page">
-          <Profile user={props.user} />
+          <Profile />
         </ErrorBoundary>
       </Route>
       <Route path="/articles/:slug">
         <ErrorBoundary message="Error occured while fetching article. Please reload the page">
-          <Article user={props.user} />
+          <Article />
         </ErrorBoundary>
       </Route>
       <Route path="/edit-article">
         <ErrorBoundary message="Error occured while fetching article's details. Please reload the page">
-          <EditArticle user={props.user} />
+          <EditArticle />
         </ErrorBoundary>
       </Route>
       <Route path="*">
@@ -163,7 +151,7 @@ function Unauthenticated(props) {
       <Route path="/articles/:slug" component={Article}></Route>
       <Route path="/profiles/:username">
         <ErrorBoundary message="Error occured while fetching the profile of the user. Please reload the page">
-          <Profile user={props.user} />
+          <Profile />
         </ErrorBoundary>
       </Route>
       <Route path="*">
